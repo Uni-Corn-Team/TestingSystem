@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 
 
@@ -24,6 +26,7 @@ class Attempt(models.Model):
         on_delete=models.CASCADE
     )
     status = models.CharField(max_length=255)
+    date = models.DateTimeField(default=datetime.datetime.now())
 
 
 class Description(models.Model):

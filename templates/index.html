@@ -25,10 +25,15 @@
 
     </p>
     <div class="text-center">
-            <button class="Button ButtonDisagree" >Отказываюсь от тестирования</button>
-            <button class="Button ButtonAgree" onclick="agreed()">Согласен, начать тестирование</button>
 
-
+        <form method="POST" action="agree/">
+            {% csrf_token %}
+            <button class="Button ButtonAgree" onclick="showError"  type="submit">Согласен, начать тестирование</button>
+        </form>
+        <form method="POST" action="disagree/">
+            {% csrf_token %}
+            <button class="Button ButtonDisagree" onclick="showError" type="submit">Отказываюсь от тестирования</button>
+        </form>
     </div>
 </div>
 
@@ -37,7 +42,8 @@
 
 </body>
 <script>
-    function agreed()
+    <!--> Сделать валидацию на наличие параметров в url-->
+    <!--function agreed()
     {
         alert("User agreed")
         const urlParams = new URLSearchParams(window.location.search);
@@ -47,6 +53,7 @@
         $.ajax(url);
         document.location="test.html?user_id="+userId + "&test_id="+testId
 
-    }
+    }-->
+
 </script>
 </html>
