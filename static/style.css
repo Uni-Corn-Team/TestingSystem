@@ -1,0 +1,183 @@
+body{
+    background: black;
+}
+@font-face {
+    font-family: 'MPlusBold';
+    src: url('./fonts/MPlusBold.ttf');
+}
+
+@font-face {
+    font-family: 'MPlusRegular';
+    src: url('./fonts/MPLUSRegular.ttf');
+}
+
+
+.Title
+{
+    font-family: 'MPlusBold', sans-serif;
+    font-size: 28pt;
+    color: white;
+
+}
+
+
+.Button
+{
+    font-family: 'MPlusBold', sans-serif;
+    font-size: 20pt;
+    border-radius: 15px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: white;
+    color: white;
+    padding: 25px;
+    margin: 25px;
+
+}
+
+.Text
+{
+    font-family: 'MPlusRegular', sans-serif;
+    font-size: 20pt;
+    color: white;
+}
+.Rectangle
+{
+    width: 150px;
+    height: 150px;
+    background: rgb(0,255,151);
+    background: linear-gradient(90deg, rgba(0,255,151,1) 0%, rgba(0,123,255,1) 100%);
+    position: absolute;
+    transform: rotate(54deg);
+    bottom: 75%;
+    right:0;
+    animation-duration: 2s;
+    animation-name: rotating;
+    animation-iteration-count: infinite;
+}
+@keyframes rotating {
+    0%{
+        transform: rotate(54deg);
+    }
+    50%
+    {
+        transform: rotate(60deg);
+    }
+    100%{
+        transform: rotate(54deg);
+    }
+}
+
+@keyframes poping {
+    0%, 100%
+    {
+        bottom: 25%;
+    }
+    50%
+    {
+        bottom: 26%;
+    }
+}
+
+.RadioBox
+{
+    transform: scale(2);
+}
+
+.Circle
+{
+    background: rgb(255,139,0);
+    background: linear-gradient(90deg, rgba(255,139,0,1) 35%, rgba(255,0,153,1) 100%);
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    border-radius: 100px;
+    transform: rotate(54deg);
+    bottom: 25%;
+    right:90%;
+    animation-duration: 2s;
+    animation-name: poping;
+    animation-iteration-count: infinite;
+}
+
+.Navigation
+{
+    position: absolute;
+    bottom: 10%;
+    width: 100%;
+}
+
+.NavigationItem
+{
+    font-family: 'MPlusRegular', sans-serif;
+    font-size: 20pt;
+    color: white;
+}
+
+.NavigationItem:hover
+{
+    font-family: 'MPlusRegular', sans-serif;
+    font-size: 20pt;
+    color: white;
+    text-decoration: underline;
+}
+
+.NavigationItemCurrent
+{
+    font-family: 'MPlusRegular', sans-serif;
+    font-size: 20pt;
+    color: white;
+    border-color: white;
+    border-style: solid;
+    border-width: 2px;
+}
+
+.ButtonAgree
+{
+   background: rgb(1,207,151);
+background: -moz-linear-gradient(90deg, rgba(1,207,151,1) 35%, rgba(0,217,89,0.9934348739495799) 100%);
+background: -webkit-linear-gradient(90deg, rgba(1,207,151,1) 35%, rgba(0,217,89,0.9934348739495799) 100%);
+background: linear-gradient(90deg, rgba(1,207,151,1) 35%, rgba(0,217,89,0.9934348739495799) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#01cf97",endColorstr="#00d959",GradientType=1);
+}
+
+.ButtonDisagree
+{
+    background: rgb(213,32,55);
+background: -moz-linear-gradient(90deg, rgba(213,32,55,1) 35%, rgba(164,0,46,0.9934348739495799) 100%);
+background: -webkit-linear-gradient(90deg, rgba(213,32,55,1) 35%, rgba(164,0,46,0.9934348739495799) 100%);
+background: linear-gradient(90deg, rgba(213,32,55,1) 35%, rgba(164,0,46,0.9934348739495799) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#d52037",endColorstr="#a4002e",GradientType=1);
+}
+
+.TextInput
+{
+    width: 100%;
+    font-family: 'MPlusBold', sans-serif;
+    font-size: 22pt;
+    color: white;
+    border-radius: 15px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: white;
+    background: transparent;
+    margin-top: 5%;
+}
+
+
+.ModelHeader
+{
+    background: #111111;
+}
+
+.ButtonContainer
+{
+    margin: 20px;
+}
+
+.LabelText
+{
+    color: rgba(255,255,255, 0.8);
+    font-family: 'MPlusRegular', sans-serif;
+    font-size: 15pt;
+}

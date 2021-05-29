@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!-- {% load static %} -->
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Здравствуй!</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="Rectangle"></div>
+<div class="Circle"></div>
+<div class="container">
+    <h1 class="text-center Title">Платформа психологического анкетирования</h1>
+    <p class="Text">Здравствуйте, {{participant}}! В рамках ежегодного психологического тестирования НИУ МИЭТ
+    мы просим вас пройти {{questions_count}} вопросов о вашем текущем состоянии. Это займет около {{questions_minutes}} минут</p>
+        <h2 class="text-center Title">Прочтите условия выполнения теста перед выполнением</h2>
+    <p class="Text">
+        В начале каждого учебного года студенты МИЭТ первого курса проходят социально-психологическое тестирование. Данный экспресс-опросник призван помочь адекватно и быстро оценить показатели эмоционального состояния и удовлетворенности условиям, в которых находится психика студента, а также проверить степень понимания себя. Эти показатели влияют на работоспособность, отношения с другими и, в целом, на субъективное представление об окружающей реальности.
+
+Что сейчас: данное тестирование проводится в бумажном виде, тратится большое количество бумаги, затем отдел воспитательной и внеучебной работы вручную обрабатывает каждую анкету, считает баллы и вносит в таблицу результаты. В целом обработка анкет занимает много рабочего времени.
+
+    </p>
+    <div class="text-center">
+            <button class="Button ButtonDisagree" >Отказываюсь от тестирования</button>
+            <button class="Button ButtonAgree" onclick="agreed()">Согласен, начать тестирование</button>
+
+
+    </div>
+</div>
+
+
+
+
+</body>
+<script>
+    function agreed()
+    {
+        alert("User agreed")
+        const urlParams = new URLSearchParams(window.location.search);
+        let userId = urlParams.get("user_id")
+        let testId = urlParams.get("test_id")
+        let url = "submit_agreement?user_id="+userId + "&test_id="+testId
+        $.ajax(url);
+        document.location="test.html?user_id="+userId + "&test_id="+testId
+
+    }
+</script>
+</html>
