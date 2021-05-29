@@ -4,9 +4,13 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return HttpResponse("Hello, World!")
+    return render(request, 'index.html')
 
 
-def hello(request):
-    return render(request, 'hello.html')
-# Create your views here.
+def create_test(request):
+    return render(request, 'create_test.html')
+
+
+def test(request):
+    return render(request, 'test.html')
+
