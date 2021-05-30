@@ -7,8 +7,10 @@ app_name = 'testing_system_app'
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url('create_test', views.create_test, name='create_test'),
-    # url('test', views.test, name='test'),
-    url('submit_disagreement/', views.send_student_answer, name="disagree"),
+    url('add_test/', views.add_test, name='add_test'),
+    url('test', views.test, name='test'),
+    url('submit_disagreement/', views.submit_agreement, name="disagree"),
     url('submit_agreement/', views.submit_agreement, name="agree"),
-    url('error/', views.handler404, name='error'),
+    url('error/', views.handler404, name='error')
+
 ]

@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render
 import datetime
 from .models import *
@@ -32,8 +34,8 @@ def test(request):
 
 def send_student_answer(request):
     print("send_answer")
-    user_id = 1 #request.GET.get("user_id")
-    test_id = 3 #request.GET.get('test_id')
+    user_id = request.GET.get("user_id")
+    test_id = request.GET.get('test_id')
     current_number = 1 # request.GET.get("current_number")
     question = Question.objects.filter(test_id=Test.objects.filter(id=test_id)[0])[current_number - 1]
     print(user_id)
@@ -49,6 +51,11 @@ def send_student_answer(request):
     print(score)
     full_report = FullReport.objects.create(question_id=question, score=score)
     return handler404(request)
+
+
+def get_first_question(request):
+    test_id = request.GET.get('test_id')
+    return Test.objects.filter(id=test_id)[0]
 
 
 def handler404(request ):
@@ -98,36 +105,9 @@ def submit_disagreement(request):
 
 
 def add_test(request):
-    print("add_test")
     if request.method == "GET":
-        print("post")
-        # all_questions = request.POST["questions"]
-        all_questions = {
-            "name": "Название психологического теста",
-            "questions":
-                [
-                    {
-                        "text": "Как часто вы думаете о смерти?",
-                        "answers_count": 2,
-                        "answers":
-                            [
-                                {"text": "Часто", "points": 10},
-                                {"text": "Редко", "points": 0}
-                            ]
-                    },
-                    {
-                        "text": "Как часто вы какаете?",
-                        "answers_count": 3,
-                        "answers":
-                            [
-                                {"text": "Очень часто", "points": 10},
-                                {"text": "Иногда", "points": 5},
-                                {"text": "Очень редко", "points": 0}
-                            ]
-                    }
-
-                ]
-        }
+        all_questions = json.loads(request.GET.get("test"))
+        print(all_questions)
         test = Test.objects.create(name=all_questions["name"])
         test.save()
         for i in range(len(all_questions["questions"])):
