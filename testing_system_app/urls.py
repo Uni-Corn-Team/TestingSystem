@@ -11,6 +11,7 @@ urlpatterns = [
     url('test', views.test, name='test'),
     url('submit_disagreement/', views.submit_agreement, name="disagree"),
     url('submit_agreement/', views.submit_agreement, name="agree"),
-    url('error/', views.handler404, name='error')
+    url('error/', views.handler404, name='error'),
+    url("receive_results/", views.receive_results, name='receive_results')
 
 ]

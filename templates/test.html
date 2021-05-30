@@ -12,43 +12,64 @@
 <div class="Rectangle"></div>
 <div class="Circle"></div>
 <div class="container">
-    <h1 class="text-center Title">Вопрос {{current_number}} из {{total_number}}</h1>
-    <p class="Text">{{question_text}} Как часто вы думаете о том, что находитесь не в том месте, в котором хотели бы быть?</p>
+    <p class="Text" id="question_text">{{question_text}} Как часто вы думаете о том, что находитесь не в том месте, в котором хотели бы быть?</p>
 
-    <div class="text-center">
-        <button class="Button ButtonAgree" onclick="handleAgreement()">Скорее да</button>
-        <button class="Button ButtonDisagree">Скорее нет</button>
+   <div class="text-center" id="buttons">
 </div>
 </div>
-
-<div class="text-center container">
-
-    <p class="Text">Навигация по вопросам</p>
-    <a class="NavigationItem" href="/quiz/1">1</a>
-    <a class="NavigationItem" href="/quiz/1">2</a>
-    <a class="NavigationItem" href="/quiz/1">3</a>
-    <a class="NavigationItem" href="/quiz/1">4</a>
-    <a class="NavigationItem" href="/quiz/1">5</a>
-    <a class="NavigationItem" href="/quiz/1">6</a>
-    <text class="NavigationItemCurrent">7</text>
-     <a class="NavigationItem" href="/quiz/1">8</a>
-</div>
-
-
 
 </body>
 <script>
 
-    function handleAgreement()
+    let currentQuestion = Cookies.get('current_question')
+    const urlParams = new URLSearchParams(window.location.search);
+    let userId = urlParams.get("user_id")
+    let testId = urlParams.get("test_id")
+    if (userId == null || testId == null)
     {
-        const urlParams = new URLSearchParams(window.location.search);
-        let userId = urlParams.get("user_id")
-        let testId = urlParams.get("test_id")
-        let questionNumber = urlParams.get("question_number")
-        addToResponseDict(points,    questionNumber-1)
-
-
+        document.location = '/error/';
     }
+    if(currentQuestion === undefined) // если в куки ничего нет, значит нужно попросить первый вопрос
+    {
+        let idFirstQuestion = "";
+         $.ajax({
+            url: '/get_first_question?test_id='+testId,
+            method: 'get',
+            success: function(data){
+                alert(data);
+                idFirstQuestion = data;
+            }
+        });
+    }
+    let jsonQuestion = "";
+    getJSONQuestion();
+    let buttonContainer = document.getElementById('buttons');
+    let textContainer = document.getElementById('question_text')
+    function renderQuestion()
+    {
+        try
+        {
+            let question = JSON.parse(jsonQuestion);
+            textContainer.innerText = question.text;
+            let answers = question.answers;
+            answers.forEach(function (value, index, array){
+                let answer = document.createElement('button')
+                answer.className='Button'
+                answer.innerText = value.text;
+                answer.onclick = function () {
+                    addToResponseDict(value.points); // запомнить результат в куки
+                    changeCurrentQuestion();
+                }
+                buttonContainer.appendChild(answer)
+            });
+        }
+        catch (e) {
+
+        }
+    }
+
+
+
 
     function addToResponseDict(points, question_index)
     {
@@ -60,17 +81,40 @@
         {
             testing = JSON.parse(testingStr)
         }
-        if(testing.length > question_index)
-        {
-            if(question_index <= 0)
-                return;
-            testing[question_index] = points;
-        }
-        else
-        {
-            testing.push(points);
-        }
+        testing.push(points);
         Cookies.set('testing', JSON.stringify(testing))
+    }
+
+    function changeCurrentQuestion()
+    {
+        let newerQuestion = ""
+            $.ajax({
+            url: '/get_next_question?test_id='+testId+'&question_id='+currentQuestion,
+            method: 'get',
+            success: function(data){
+                if(data === "Finish")
+                {
+                    document.location = '/finish?user_id=' + userId+"&test_id="+testId;
+                }
+                newerQuestion = data;
+                Cookies.set('current_question', newerQuestion);
+                document.location = '/test?user_id='+userId+"&test_id="+testId;
+            }
+        });
+
+    }
+
+    function getJSONQuestion()
+    {
+         $.ajax({
+            url: '/get_json_question?test_id='+testId+'&current_question='+currentQuestion,
+            method: 'get',
+            success: function(data){
+                alert(data);
+                jsonQuestion = data;
+                renderQuestion()
+            }
+        });
     }
 
 

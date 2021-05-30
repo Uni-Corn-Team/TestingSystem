@@ -32,30 +32,69 @@ def test(request):
                                          "question_text": question_text})
 
 
-def send_student_answer(request):
+def receive_results(request):
     print("send_answer")
     user_id = request.GET.get("user_id")
     test_id = request.GET.get('test_id')
-    current_number = 1 # request.GET.get("current_number")
-    question = Question.objects.filter(test_id=Test.objects.filter(id=test_id)[0])[current_number - 1]
+    results = json.loads(request.GET.get("results"))
     print(user_id)
     student_id = Student.objects.filter(id=user_id)[0]
     print(student_id)
-    general_report = GeneralReport.objects.create(student_id=student_id, full_score=0)
-    student_answer = 0 # request.GET.get("student_answer")
-    possible_answers = QuestionAnswer.objects.filter(question_id=question)
-    question_answer = QuestionAnswer.objects.filter(question_id=question,
-                                                    answer_id=possible_answers[student_answer].answer_id)[0].answer_id
-    print(question_answer)
-    score = Answer.objects.filter(id=question_answer.id)[0].score
-    print(score)
-    full_report = FullReport.objects.create(question_id=question, score=score)
+    full_score = sum(results)
+    general_report = GeneralReport.objects.create(student_id=student_id, full_score=full_score)
+    for i in range(Question.objects.filter(test_id=test_id).count()):
+        question = Question.objects.filter(test_id=test_id)[i]
+        full_report = FullReport.objects.create(question_id=question[i].id, score=results[i])
+        full_report.save()
+        full_general = FullGeneralReport.objects.create(full_report_id=full_report.id,
+                                                        general_report_id=general_report.id)
+        full_general.save()
+
+    # проверить на существование уже этой записи
+
+
+
     return handler404(request)
 
 
 def get_first_question(request):
     test_id = request.GET.get('test_id')
-    return Test.objects.filter(id=test_id)[0]
+    return Question.objects.filter(test_id=test_id)[0]
+
+
+def get_next_question(request):
+    test_id = request.GET.get('test_id')
+    question_id = request.GET.get('question_id')
+    questions = Question.objects.filter(test_id=test_id)
+    if len(questions) == 0:
+        raise IndexError
+    prev = questions[0]
+    for question in questions:
+        if prev.id == question_id:
+            return question.id
+        prev = question
+
+    return "Finish"
+
+
+def get_json_question(request):
+    test_id = request.GET.get('test_id')
+    data = dict()
+    current_question = request.GET.get('current_question')
+    question_text = Question.objects.filter(test_id=test_id, id=current_question)[0]
+    question_answers = QuestionAnswer.objects.filter(question_id=current_question)
+    data["text"] = question_text
+    data["answers"] = []
+    for i in range(len(question_answers)):
+        answer = Answer.objects.filter(id=question_answers[i].answer_id)[0]
+        data["answers"][i]["text"] = answer.text
+        data["answers"][i]["points"] = answer.score
+
+    return json.dumps(data)
+
+
+
+
 
 
 def handler404(request ):
