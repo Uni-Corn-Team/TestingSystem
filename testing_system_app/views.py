@@ -26,13 +26,13 @@ def test(request):
 
 
 def receive_results(request):
-    print("send_answer")
+    # print("send_answer")
     user_id = request.GET.get("user_id")
     test_id = request.GET.get('test_id')
     results = json.loads(request.GET.get("results"))
-    print(user_id)
+    # print(user_id)
     student_id = Student.objects.filter(id=user_id)[0]
-    print(student_id)
+    # print(student_id)
     full_score = sum(results)
     general_report = GeneralReport.objects.create(student_id=student_id, full_score=full_score)
     for i in range(Question.objects.filter(test_id=test_id).count()):
@@ -54,10 +54,10 @@ def receive_results(request):
 
 def get_first_question(request):
     test_id = request.GET.get('test_id')
-    print(1000000000002)
-    print(test_id)
+    # print(1000000000002)
+    # print(test_id)
     test = Test.objects.get(id=test_id)
-    print(1000000000002)
+    # print(1000000000002)
     id = Question.objects.filter(test_id=test)[0].id
     return HttpResponse(str(id))
 
@@ -70,7 +70,7 @@ def get_next_question(request):
     if len(questions) == 0:
         raise IndexError
     prev = questions[0]
-    print("To compare", str(question_id))
+    # print("To compare", str(question_id))
     for i in range(1, len(questions)):
         question = questions[i]
         if str(prev.id) == str(question_id):
@@ -82,22 +82,24 @@ def get_next_question(request):
 
 def get_json_question(request):
     test_id = request.GET.get('test_id')
-    print(test_id)
+    # print(test_id)
     data = dict()
     current_question = request.GET.get('current_question')
     test_obj = Test.objects.get(id=test_id)
-    print(test_obj)
-    question_text = Question.objects.filter(test_id=test_obj, id=current_question)[0]
-    question_answers = QuestionAnswer.objects.filter(question_id=current_question)
-    data["text"] = question_text.text
-    data["answers"] = []
-    for i in range(len(question_answers)):
-        answer = Answer.objects.filter(id=question_answers[i].answer_id.id)[0]
-        data["answers"].append({
-            "text": answer.text,
-            "points": answer.score
-        })
-    print(data)
+    # print(test_obj)
+    if current_question != "Finish":
+        question_text = Question.objects.filter(test_id=test_obj, id=current_question)[0]
+        question_answers = QuestionAnswer.objects.filter(question_id=current_question)
+        data["text"] = question_text.text
+        data["answers"] = []
+        for i in range(len(question_answers)):
+            answer = Answer.objects.filter(id=question_answers[i].answer_id.id)[0]
+            data["answers"].append({
+                "text": answer.text,
+                "points": answer.score
+            })
+
+    # print(data)
 
     return HttpResponse(json.dumps(data))
 
@@ -123,11 +125,11 @@ def submit_agreement(request):
     if len(Attempt.objects.filter(student_id=user_id, test_id=test_id)) > 0:
         return handler404(request)
     student = Student.objects.get(id=user_id)
-    print(test_id)
+    # print(test_id)
     test = Test.objects.get(id=test_id)
-    print(test)
+    # print(test)
     attempt = Attempt.objects.create(student_id=student, test_id=test, status=status, date=date)
-    print(attempt)
+    # print(attempt)
     attempt.save()
     return HttpResponseRedirect("/test.html?user_id=" + user_id + "&test_id=" + test_id)
 
