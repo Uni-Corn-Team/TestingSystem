@@ -75,7 +75,11 @@ class FullReport(models.Model):
         Question,
         on_delete=models.CASCADE
     )
-    score = models.IntegerField()
+    answer_id = models.ForeignKey(
+        Answer,
+        on_delete=models.CASCADE,
+        default=0
+    )
 
 
 class FullGeneralReport(models.Model):

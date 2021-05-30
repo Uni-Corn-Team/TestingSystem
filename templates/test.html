@@ -12,7 +12,7 @@
 <div class="Rectangle"></div>
 <div class="Circle"></div>
 <div class="container">
-    <p class="Text" id="question_text">{{question_text}} Как часто вы думаете о том, что находитесь не в том месте, в котором хотели бы быть?</p>
+    <p class="Text" id="question_text"></p>
 
    <div class="text-center" id="buttons">
 </div>
@@ -22,12 +22,19 @@
 <script>
 
     let currentQuestion = Cookies.get('current_question')
+
     const urlParams = new URLSearchParams(window.location.search);
     let userId = urlParams.get("user_id")
     let testId = urlParams.get("test_id")
+
     if (userId == null || testId == null)
     {
         document.location = '/error/';
+    }
+    if(currentQuestion == "Finish")
+    {
+
+         document.location = '/finish?user_id=' + userId+"&test_id="+testId;
     }
     if(currentQuestion === undefined) // если в куки ничего нет, значит нужно попросить первый вопрос
     {
@@ -36,20 +43,23 @@
             url: '/get_first_question?test_id='+testId,
             method: 'get',
             success: function(data){
-                alert(data);
                 idFirstQuestion = data;
+                currentQuestion = data;
+                getJSONQuestion();
             }
         });
     }
     let jsonQuestion = "";
-    getJSONQuestion();
     let buttonContainer = document.getElementById('buttons');
     let textContainer = document.getElementById('question_text')
+
     function renderQuestion()
     {
         try
         {
+
             let question = JSON.parse(jsonQuestion);
+
             textContainer.innerText = question.text;
             let answers = question.answers;
             answers.forEach(function (value, index, array){
@@ -67,6 +77,8 @@
 
         }
     }
+    getJSONQuestion();
+    renderQuestion();
 
 
 
@@ -106,11 +118,11 @@
 
     function getJSONQuestion()
     {
+        url =  '/get_json_question?test_id='+testId+'&current_question='+currentQuestion;
          $.ajax({
-            url: '/get_json_question?test_id='+testId+'&current_question='+currentQuestion,
+            url: url,
             method: 'get',
             success: function(data){
-                alert(data);
                 jsonQuestion = data;
                 renderQuestion()
             }

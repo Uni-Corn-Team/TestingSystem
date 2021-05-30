@@ -22,14 +22,7 @@ def create_test(request):
 def test(request):
     user_id = request.GET.get("user_id")
     test_id = request.GET.get('test_id')
-    current_number = Attempt.objects.filter(
-        test_id=test_id, student_id=user_id)[0].current_number + 1
-    total_number = Question.objects.filter(
-        test_id=test_id).count()
-    question_text = Question.objects.filter(test_id=test_id)[current_number - 1].text
-
-    return render(request, 'test.html', {"current_number": current_number, "total_number": total_number,
-                                         "question_text": question_text})
+    return render(request, 'test.html')
 
 
 def receive_results(request):
@@ -44,7 +37,9 @@ def receive_results(request):
     general_report = GeneralReport.objects.create(student_id=student_id, full_score=full_score)
     for i in range(Question.objects.filter(test_id=test_id).count()):
         question = Question.objects.filter(test_id=test_id)[i]
-        full_report = FullReport.objects.create(question_id=question[i].id, score=results[i])
+        question_answers = QuestionAnswer.objects.filter(question_id=question.id)
+        answer = Answer.objects.filter(id=question_answers[i].answer_id)
+        full_report = FullReport.objects.create(question_id=question[i].id, answer_id=answer.id)
         full_report.save()
         full_general = FullGeneralReport.objects.create(full_report_id=full_report.id,
                                                         general_report_id=general_report.id)
@@ -59,7 +54,13 @@ def receive_results(request):
 
 def get_first_question(request):
     test_id = request.GET.get('test_id')
-    return Question.objects.filter(test_id=test_id)[0]
+    print(1000000000002)
+    print(test_id)
+    test = Test.objects.get(id=test_id)
+    print(1000000000002)
+    id = Question.objects.filter(test_id=test)[0].id
+    return HttpResponse(str(id))
+
 
 
 def get_next_question(request):
@@ -69,28 +70,36 @@ def get_next_question(request):
     if len(questions) == 0:
         raise IndexError
     prev = questions[0]
-    for question in questions:
-        if prev.id == question_id:
-            return question.id
+    print("To compare", str(question_id))
+    for i in range(1, len(questions)):
+        question = questions[i]
+        if str(prev.id) == str(question_id):
+            return HttpResponse(str(question.id))
         prev = question
 
-    return "Finish"
+    return HttpResponse("Finish")
 
 
 def get_json_question(request):
     test_id = request.GET.get('test_id')
+    print(test_id)
     data = dict()
     current_question = request.GET.get('current_question')
-    question_text = Question.objects.filter(test_id=test_id, id=current_question)[0]
+    test_obj = Test.objects.get(id=test_id)
+    print(test_obj)
+    question_text = Question.objects.filter(test_id=test_obj, id=current_question)[0]
     question_answers = QuestionAnswer.objects.filter(question_id=current_question)
-    data["text"] = question_text
+    data["text"] = question_text.text
     data["answers"] = []
     for i in range(len(question_answers)):
-        answer = Answer.objects.filter(id=question_answers[i].answer_id)[0]
-        data["answers"][i]["text"] = answer.text
-        data["answers"][i]["points"] = answer.score
+        answer = Answer.objects.filter(id=question_answers[i].answer_id.id)[0]
+        data["answers"].append({
+            "text": answer.text,
+            "points": answer.score
+        })
+    print(data)
 
-    return json.dumps(data)
+    return HttpResponse(json.dumps(data))
 
 
 
@@ -164,3 +173,5 @@ def add_test(request):
     return HttpResponseRedirect("/create_test.html")
 
 
+def finish(request):
+    return render(request, "finish.html")
