@@ -26,6 +26,7 @@ class Attempt(models.Model):
     status = models.CharField(max_length=255)
     date = models.DateTimeField(default=datetime.datetime.now())
     current_number = models.IntegerField(default=0)
+    general_id = models.IntegerField()
 
 
 class Description(models.Model):

@@ -26,30 +26,18 @@ def test(request):
 
 
 def receive_results(request):
-    # print("send_answer")
     user_id = request.GET.get("user_id")
     test_id = request.GET.get('test_id')
     results = json.loads(request.GET.get("results"))
-    print("safafdgsdgsdgsgsd", user_id)
+    # print(user_id)
     student_id = Student.objects.filter(id=user_id)[0]
     # print(student_id)
     full_score = sum(results)
     general_report = GeneralReport.objects.create(student_id=student_id, full_score=full_score)
-    for i in range(Question.objects.filter(test_id=test_id).count()):
-        question = Question.objects.filter(test_id=test_id)[i]
-        question_answers = QuestionAnswer.objects.filter(question_id=question.id)
-        answer = Answer.objects.filter(id=question_answers[i].answer_id)
-        full_report = FullReport.objects.create(question_id=question[i].id, answer_id=answer.id)
-        full_report.save()
-        full_general = FullGeneralReport.objects.create(full_report_id=full_report.id,
-                                                        general_report_id=general_report.id)
-        full_general.save()
+    general_report.save()
+    Attempt.objects.create(student_id=student_id, test_id=Test.objects.get(test_id), status="Done", general_id=general_report.id)
 
-    # проверить на существование уже этой записи
-
-
-
-    return handler404(request)
+    return HttpResponse("Received")
 
 
 def get_first_question(request):
@@ -87,16 +75,17 @@ def get_json_question(request):
     current_question = request.GET.get('current_question')
     test_obj = Test.objects.get(id=test_id)
     # print(test_obj)
-    question_text = Question.objects.filter(test_id=test_obj, id=current_question)[0]
-    question_answers = QuestionAnswer.objects.filter(question_id=current_question)
-    data["text"] = question_text.text
-    data["answers"] = []
-    for i in range(len(question_answers)):
-        answer = Answer.objects.filter(id=question_answers[i].answer_id.id)[0]
-        data["answers"].append({
-            "text": answer.text,
-            "points": answer.score
-        })
+    if current_question != "Finish":
+        question_text = Question.objects.filter(test_id=test_obj, id=current_question)[0]
+        question_answers = QuestionAnswer.objects.filter(question_id=current_question)
+        data["text"] = question_text.text
+        data["answers"] = []
+        for i in range(len(question_answers)):
+            answer = Answer.objects.filter(id=question_answers[i].answer_id.id)[0]
+            data["answers"].append({
+                "text": answer.text,
+                "points": answer.score
+            })
 
     # print(data)
 
@@ -115,21 +104,24 @@ def handler404(request ):
 
 
 def submit_agreement(request):
+
     user_id = request.GET.get('user_id')
     test_id = request.GET.get('test_id')
+    print(user_id)
+    print(test_id)
     if user_id == "null" or test_id == "null":
         return handler404(request)
     status = "Agree"
     date = datetime.datetime.now()
-    if len(Attempt.objects.filter(student_id=user_id, test_id=test_id)) > 0:
-        return handler404(request)
-    student = Student.objects.get(id=user_id)
+    #if len(Attempt.objects.filter(student_id=user_id, test_id=test_id)) > 0:
+    #    return handler404(request)
+    #student = Student.objects.get(id=user_id)
     # print(test_id)
-    test = Test.objects.get(id=test_id)
+    #test = Test.objects.get(id=test_id)
     # print(test)
-    attempt = Attempt.objects.create(student_id=student, test_id=test, status=status, date=date)
+    # attempt = Attempt.objects.create(student_id=student, test_id=test, status=status, date=date)
     # print(attempt)
-    attempt.save()
+    # attempt.save()
     return HttpResponseRedirect("/test.html?user_id=" + user_id + "&test_id=" + test_id)
 
 
@@ -177,33 +169,53 @@ def add_test(request):
 def finish(request):
     return render(request, "finish.html")
 
-class Report:
-    def __init__(self, fio, group, result, datetime_attempt, status):
-        """Constructor"""
-        self.fio = fio
-        self.group = group
-        self.result = result
-        self.datetime_attempt = datetime_attempt
-        self.status = status
 
-def admin_results(request):
-    reports = []
-    attempts = Attempt.objects.all()
-    for attempt in attempts:
-        fio = Student.objects.get(id=attempt.student_id.id).full_name
-        group = Student.objects.get(id=attempt.student_id.id).full_name
-        print(attempt.test_id.id)
-        print(Test.objects.get(id=attempt.test_id.id).id)
-        test_id = Test.objects.get(id=attempt.test_id.id).id
-        question_id = Question.objects.filter(test_id=attempt.test_id.id)[0].id
-        print("fdsfds", question_id)
-        #print(FullReport.objects.get(question_id=question_id))
+def select_test(request):
+    tests = Test.objects.filter()
+    return render(request, "tests_to_send.html", {"tests": tests})
 
-        fullreport_id = FullReport.objects.get(question_id=question_id).id
-        gfreport_id = FullGeneralReport.objects.get(full_report_id=fullreport_id)
-        score = GeneralReport.objects.get(id=gfreport_id).fullscore
-        status = attempt.status
-        datetime_attempt = attempt.date
-        reports.append(Report(fio, group, score,datetime_attempt, status ))
-    print(reports)
-    return render(request,"admin_results.html",reports)
+
+def mail_test(request):
+    students = Student.objects.filter()
+    return render(request, "send_test.html", {"students": students})
+
+import smtplib
+import ssl
+
+def send_email(recipient, student_name, user_id, test_id):
+
+    user = "miet.xakaton.2021@gmail.com"
+    FROM = "miet.xakaton.2021@gmail.com"
+    pwd = "morgenshtern"
+    TO = recipient if isinstance(recipient, list) else [recipient]
+
+    SUBJECT = "gfds"
+    TEXT = "localhost:8000/?user_id=%s&test_id=%s" % (user_id, test_id)
+
+    # Prepare actual message
+    print(FROM)
+    print(TO)
+    print(SUBJECT)
+    print(TEXT)
+    message = """From: %s\nTo: %s\nSubject: %s\n\n%s
+    """ % (FROM, ", ".join(TO), SUBJECT, TEXT)
+
+    try:
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.ehlo()
+        server.starttls()
+        server.login(user, pwd)
+        server.sendmail(FROM, TO, message)
+        server.close()
+        print('successfully sent the mail')
+    except Exception as e:
+        print("failed to send mail" + str(e))
+
+
+
+def send_mail(request):
+    email = request.GET.get('email')
+    name = request.GET.get('name')
+    user_id = request.GET.get('user_id')
+    test_id = request.GET.get('test_id')
+    send_email(email, name, user_id, test_id)

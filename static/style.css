@@ -12,6 +12,12 @@ body{
     src: url('./fonts/MPLUSRegular.ttf');
 }
 
+a:hover
+{
+    color: white;
+    text-decoration: underline;
+}
+
 
 .Title
 {
@@ -181,4 +187,10 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#d52037",endCo
     color: rgba(255,255,255, 0.8);
     font-family: 'MPlusRegular', sans-serif;
     font-size: 15pt;
+}
+
+
+.ButtonChoice
+{
+    background-color: black;
 }

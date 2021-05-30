@@ -6,6 +6,9 @@ app_name = 'testing_system_app'
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url('send_mail', views.send_mail, name='fdsfd'),
+    url('mail_test', views.mail_test, name='dsgf'),
+    url('select_test', views.select_test, name='fdsf'),
     url('create_test', views.create_test, name='create_test'),
     url('add_test', views.add_test, name='add_test'),
     url('test', views.test, name='test'),
@@ -16,6 +19,5 @@ urlpatterns = [
     url("get_first_question", views.get_first_question, name='get_first_question'),
     url("get_next_question", views.get_next_question, name='get_next_question'),
     url("get_json_question", views.get_json_question, name='get_json_question'),
-    url("admin_results", views.admin_results, name='admin_results'),
     url("finish", views.finish)
 ]

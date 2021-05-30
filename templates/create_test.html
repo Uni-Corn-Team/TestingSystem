@@ -43,6 +43,7 @@
         </div>
     </div>
 </div>
+<p class="LabelText" id='status' style="visibility: hidden">Тест сохранен! Вы можете выбрать его для отправки <a style='' href="/select_test">здесь</a></p>
 </body>
 <script>
     let container = document.getElementById('questions')
@@ -181,6 +182,7 @@
             method: 'get',
             data: {test: data}
         });
+        document.getElementById('status').style.visibility = 'visible'
 
     }
 
