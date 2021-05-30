@@ -26,14 +26,10 @@
     </p>
     <div class="text-center">
 
-        <form method="POST" action="agree/">
-            {% csrf_token %}
-            <button class="Button ButtonAgree" onclick="showError"  type="submit">Согласен, начать тестирование</button>
-        </form>
-        <form method="POST" action="disagree/">
-            {% csrf_token %}
-            <button class="Button ButtonDisagree" onclick="showError" type="submit">Отказываюсь от тестирования</button>
-        </form>
+
+            <button class="Button ButtonAgree" onclick="agreed()">Согласен, начать тестирование</button>
+            <button class="Button ButtonDisagree" onclick="disagreed()">Отказываюсь от тестирования</button>
+
     </div>
 </div>
 
@@ -42,18 +38,29 @@
 
 </body>
 <script>
-    <!--> Сделать валидацию на наличие параметров в url-->
-    <!--function agreed()
+    function agreed()
     {
-        alert("User agreed")
         const urlParams = new URLSearchParams(window.location.search);
         let userId = urlParams.get("user_id")
         let testId = urlParams.get("test_id")
-        let url = "submit_agreement?user_id="+userId + "&test_id="+testId
-        $.ajax(url);
-        document.location="test.html?user_id="+userId + "&test_id="+testId
+        let url = "/submit_agreement?user_id="+userId + "&test_id="+testId
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function ()
+            {
+                document.location="test.html?user_id="+userId + "&test_id="+testId
+            },
+             error: function() {
+            document.location = '/error/'
+            }
+        });
+    }
+        function disagreed()
+        {
+            document.location = '/submit_disagreement/'
+        }
 
-    }-->
 
 </script>
 </html>

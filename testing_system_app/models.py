@@ -8,25 +8,24 @@ class Student(models.Model):
     full_name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     group = models.CharField(max_length=255)
-    hash = models.CharField(max_length=255)
 
 
 class Test(models.Model):
     name = models.CharField(max_length=255)
-    hash = models.CharField(max_length=255)
 
 
 class Attempt(models.Model):
     student_id = models.ForeignKey(
         Student,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
     )
     test_id = models.ForeignKey(
         Test,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
     )
     status = models.CharField(max_length=255)
     date = models.DateTimeField(default=datetime.datetime.now())
+    current_number = models.IntegerField(default=0)
 
 
 class Description(models.Model):
@@ -50,10 +49,6 @@ class Question(models.Model):
         on_delete=models.CASCADE
     )
     text = models.CharField(max_length=255)
-    ans_id = models.ForeignKey(
-        Answer,
-        on_delete=models.CASCADE
-    )
 
 
 class QuestionAnswer(models.Model):
