@@ -29,8 +29,8 @@
     const urlParams = new URLSearchParams(window.location.search);
     let userId = urlParams.get("user_id")
     let testId = urlParams.get("test_id")
-     calculateSum()
-     sendResultsToServer()
+    calculateSum()
+    sendResultsToServer()
     function calculateSum()
     {
         let testingStr = Cookies.get('testing')

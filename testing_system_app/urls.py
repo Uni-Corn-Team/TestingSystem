@@ -16,5 +16,6 @@ urlpatterns = [
     url("get_first_question", views.get_first_question, name='get_first_question'),
     url("get_next_question", views.get_next_question, name='get_next_question'),
     url("get_json_question", views.get_json_question, name='get_json_question'),
+    url("admin_results", views.admin_results, name='admin_results'),
     url("finish", views.finish)
 ]

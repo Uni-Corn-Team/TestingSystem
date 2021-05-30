@@ -30,7 +30,7 @@ def receive_results(request):
     user_id = request.GET.get("user_id")
     test_id = request.GET.get('test_id')
     results = json.loads(request.GET.get("results"))
-    # print(user_id)
+    print("safafdgsdgsdgsgsd", user_id)
     student_id = Student.objects.filter(id=user_id)[0]
     # print(student_id)
     full_score = sum(results)
@@ -87,17 +87,16 @@ def get_json_question(request):
     current_question = request.GET.get('current_question')
     test_obj = Test.objects.get(id=test_id)
     # print(test_obj)
-    if current_question != "Finish":
-        question_text = Question.objects.filter(test_id=test_obj, id=current_question)[0]
-        question_answers = QuestionAnswer.objects.filter(question_id=current_question)
-        data["text"] = question_text.text
-        data["answers"] = []
-        for i in range(len(question_answers)):
-            answer = Answer.objects.filter(id=question_answers[i].answer_id.id)[0]
-            data["answers"].append({
-                "text": answer.text,
-                "points": answer.score
-            })
+    question_text = Question.objects.filter(test_id=test_obj, id=current_question)[0]
+    question_answers = QuestionAnswer.objects.filter(question_id=current_question)
+    data["text"] = question_text.text
+    data["answers"] = []
+    for i in range(len(question_answers)):
+        answer = Answer.objects.filter(id=question_answers[i].answer_id.id)[0]
+        data["answers"].append({
+            "text": answer.text,
+            "points": answer.score
+        })
 
     # print(data)
 
@@ -177,3 +176,34 @@ def add_test(request):
 
 def finish(request):
     return render(request, "finish.html")
+
+class Report:
+    def __init__(self, fio, group, result, datetime_attempt, status):
+        """Constructor"""
+        self.fio = fio
+        self.group = group
+        self.result = result
+        self.datetime_attempt = datetime_attempt
+        self.status = status
+
+def admin_results(request):
+    reports = []
+    attempts = Attempt.objects.all()
+    for attempt in attempts:
+        fio = Student.objects.get(id=attempt.student_id.id).full_name
+        group = Student.objects.get(id=attempt.student_id.id).full_name
+        print(attempt.test_id.id)
+        print(Test.objects.get(id=attempt.test_id.id).id)
+        test_id = Test.objects.get(id=attempt.test_id.id).id
+        question_id = Question.objects.filter(test_id=attempt.test_id.id)[0].id
+        print("fdsfds", question_id)
+        #print(FullReport.objects.get(question_id=question_id))
+
+        fullreport_id = FullReport.objects.get(question_id=question_id).id
+        gfreport_id = FullGeneralReport.objects.get(full_report_id=fullreport_id)
+        score = GeneralReport.objects.get(id=gfreport_id).fullscore
+        status = attempt.status
+        datetime_attempt = attempt.date
+        reports.append(Report(fio, group, score,datetime_attempt, status ))
+    print(reports)
+    return render(request,"admin_results.html",reports)
