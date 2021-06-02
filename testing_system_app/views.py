@@ -6,7 +6,6 @@ from .models import *
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import Http404
 
-
 user_id = ""
 test_id = ""
 
@@ -35,7 +34,8 @@ def receive_results(request):
     full_score = sum(results)
     general_report = GeneralReport.objects.create(student_id=student_id, full_score=full_score)
     general_report.save()
-    Attempt.objects.create(student_id=student_id, test_id=Test.objects.get(test_id), status="Done", general_id=general_report.id)
+    Attempt.objects.create(student_id=student_id, test_id=Test.objects.get(test_id), status="Done",
+                           general_id=general_report.id)
 
     return HttpResponse("Received")
 
@@ -48,7 +48,6 @@ def get_first_question(request):
     # print(1000000000002)
     id = Question.objects.filter(test_id=test)[0].id
     return HttpResponse(str(id))
-
 
 
 def get_next_question(request):
@@ -92,11 +91,7 @@ def get_json_question(request):
     return HttpResponse(json.dumps(data))
 
 
-
-
-
-
-def handler404(request ):
+def handler404(request):
     template_name = '404.html'
     response = render(request, template_name)
     response.status_code = 404
@@ -104,7 +99,6 @@ def handler404(request ):
 
 
 def submit_agreement(request):
-
     user_id = request.GET.get('user_id')
     test_id = request.GET.get('test_id')
     print(user_id)
@@ -113,11 +107,11 @@ def submit_agreement(request):
         return handler404(request)
     status = "Agree"
     date = datetime.datetime.now()
-    #if len(Attempt.objects.filter(student_id=user_id, test_id=test_id)) > 0:
+    # if len(Attempt.objects.filter(student_id=user_id, test_id=test_id)) > 0:
     #    return handler404(request)
-    #student = Student.objects.get(id=user_id)
+    # student = Student.objects.get(id=user_id)
     # print(test_id)
-    #test = Test.objects.get(id=test_id)
+    # test = Test.objects.get(id=test_id)
     # print(test)
     # attempt = Attempt.objects.create(student_id=student, test_id=test, status=status, date=date)
     # print(attempt)
@@ -152,7 +146,8 @@ def add_test(request):
         test = Test.objects.create(name=all_questions["name"])
         test.save()
         for i in range(len(all_questions["questions"])):
-            questions = Question.objects.create(test_id=Test.objects.all().last(), text=all_questions["questions"][i]["text"])
+            questions = Question.objects.create(test_id=Test.objects.all().last(),
+                                                text=all_questions["questions"][i]["text"])
             questions.save()
             for j in range(len(all_questions["questions"][i]["answers"])):
                 answers = Answer.objects.create(score=all_questions["questions"][i]["answers"][j]["points"],
@@ -179,11 +174,12 @@ def mail_test(request):
     students = Student.objects.filter()
     return render(request, "send_test.html", {"students": students})
 
+
 import smtplib
 import ssl
 
-def send_email(recipient, student_name, user_id, test_id):
 
+def send_email(recipient, student_name, user_id, test_id):
     user = "miet.xakaton.2021@gmail.com"
     FROM = "miet.xakaton.2021@gmail.com"
     pwd = "morgenshtern"
@@ -212,10 +208,21 @@ def send_email(recipient, student_name, user_id, test_id):
         print("failed to send mail" + str(e))
 
 
-
 def send_mail(request):
     email = request.GET.get('email')
     name = request.GET.get('name')
     user_id = request.GET.get('user_id')
     test_id = request.GET.get('test_id')
     send_email(email, name, user_id, test_id)
+
+
+def sign_in(request):
+    return render(request, 'sign_in.html')
+
+
+def admin_page(request):
+    return render(request, 'admin_page.html')
+
+
+def admin_results(request):
+    return render(request, 'admin_results.html')
