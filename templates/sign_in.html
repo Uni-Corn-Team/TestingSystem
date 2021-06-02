@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- {% load static %} -->
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Создание теста</title>
+    <title>Вход</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
@@ -13,6 +14,7 @@
             integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../static/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="container text-center">
@@ -22,7 +24,7 @@
 </div>
 
 <div class="container text-center">
-    <button class="Button ButtonAgree" id="sign_in">Войти</button>
+    <button class="Button ButtonAgree" id="sign_in" onclick="sign_in_user()">Войти</button>
 </div>
 
 </body>
@@ -32,7 +34,19 @@
 <script>
     let sign_in_button = document.getElementById('sign_in');
 
-    sign_in_button.onclick = function () {
-        document.location = '/admin_page/'
+    function sign_in_user() {
+        let login = document.getElementById('login').value;
+        let password = document.getElementById('password').value;
+        $.ajax({
+            type: "GET",
+            url: '/sign_in_user?login='+login+'&password='+password,
+            success: function ()
+            {
+                document.location = '/admin_page/'
+            },
+            error: function() {
+            document.location = '/error/'
+            }
+        });
     }
 </script>

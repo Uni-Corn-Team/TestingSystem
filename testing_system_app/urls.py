@@ -20,7 +20,9 @@ urlpatterns = [
     url("get_next_question", views.get_next_question, name='get_next_question'),
     url("get_json_question", views.get_json_question, name='get_json_question'),
     url("finish", views.finish),
+    url('sign_in_user', views.sign_in_user, name='sign_in_user'),
     url('sign_in', views.sign_in, name='sign_in'),
     url('admin_page', views.admin_page, name='admin_page'),
     url('admin_results', views.admin_results, name='admin_results'),
+    url('log_out_user', views.log_out_user, name='logout'),
 ]

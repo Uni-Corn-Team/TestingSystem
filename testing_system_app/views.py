@@ -1,6 +1,7 @@
 import json
 
-from django.shortcuts import render
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, redirect
 import datetime
 from .models import *
 from django.http import HttpResponse, HttpResponseRedirect
@@ -166,8 +167,11 @@ def finish(request):
 
 
 def select_test(request):
-    tests = Test.objects.filter()
-    return render(request, "tests_to_send.html", {"tests": tests})
+    if request.user.is_authenticated:
+        tests = Test.objects.filter()
+        return render(request, "tests_to_send.html", {"tests": tests})
+    else:
+        return redirect('/sign_in/')
 
 
 def mail_test(request):
@@ -217,12 +221,47 @@ def send_mail(request):
 
 
 def sign_in(request):
-    return render(request, 'sign_in.html')
+    if not request.user.is_authenticated:
+        return render(request, 'sign_in.html')
+    else:
+        return redirect('/admin_page/')
+
+
+def sign_in_user(request):
+    username = request.GET.get('login', '')
+    password = request.GET.get('password', '')
+    print(username)
+    print(password)
+    if username == '' or password == '':
+        return handler404(request)
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+            return HttpResponseRedirect('/admin_page/')
+        else:
+            pass
+            # Return a 'disabled account' error message
+    else:
+        pass
+        # Return an 'invalid login' error message
+
+
+def log_out_user(request):
+    logout(request)
+    return HttpResponseRedirect('/sign_in/')
 
 
 def admin_page(request):
-    return render(request, 'admin_page.html')
+    if request.user.is_authenticated:
+        return render(request, 'admin_page.html')
+    else:
+        return redirect('/sign_in/')
 
 
 def admin_results(request):
-    return render(request, 'admin_results.html')
+    if request.user.is_authenticated:
+        return render(request, 'admin_results.html')
+    else:
+        return redirect('/sign_in/')
+
