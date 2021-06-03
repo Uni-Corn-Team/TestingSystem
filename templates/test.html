@@ -24,8 +24,12 @@
     let currentQuestion = Cookies.get('current_question')
 
     const urlParams = new URLSearchParams(window.location.search);
+
     let userId = urlParams.get("user_id")
     let testId = urlParams.get("test_id")
+    //let path = location.pathname.split('/');
+    //let userId = path[path.length-3];
+    //let testId = path[path.length-1];
 
     if (userId == null || testId == null)
     {

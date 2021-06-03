@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.urls import path
 
 from . import views
 
@@ -6,6 +7,7 @@ app_name = 'testing_system_app'
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    path('usr/<str:username>/test/<str:test>', views.index, name='index'),
     url('send_mail', views.send_mail, name='fdsfd'),
     url('mail_test', views.mail_test, name='dsgf'),
     url('select_test', views.select_test, name='fdsf'),
@@ -13,7 +15,7 @@ urlpatterns = [
     url('add_test', views.add_test, name='add_test'),
     url('test', views.test, name='test'),
     url('submit_disagreement', views.submit_agreement, name="disagree"),
-    url('submit_agreement', views.submit_agreement, name="agree"),
+    path('submit_agreement/<str:user>/<str:_test>', views.submit_agreement, name="agree"),
     url('error', views.handler404, name='error'),
     url("receive_results", views.receive_results, name='receive_results'),
     url("get_first_question", views.get_first_question, name='get_first_question'),

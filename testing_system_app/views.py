@@ -11,7 +11,9 @@ user_id = ""
 test_id = ""
 
 
-def index(request):
+def index(request, username="", test=""):
+    if username == "" or test == "":
+        return redirect('/sign_in/')
     return render(request, 'index.html')
 
 
@@ -99,9 +101,11 @@ def handler404(request):
     return response
 
 
-def submit_agreement(request):
-    user_id = request.GET.get('user_id')
-    test_id = request.GET.get('test_id')
+def submit_agreement(request, user="", _test=""):
+    #user_id = request.GET.get('user_id')
+    #test_id = request.GET.get('test_id')
+    user_id = user
+    test_id = _test
     print(user_id)
     print(test_id)
     if user_id == "null" or test_id == "null":
