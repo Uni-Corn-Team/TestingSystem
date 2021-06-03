@@ -68,6 +68,11 @@ class GeneralReport(models.Model):
         Student,
         on_delete=models.CASCADE
     )
+    test_id = models.ForeignKey(
+        Test,
+        on_delete=models.CASCADE,
+        default=0
+    )
     full_score = models.IntegerField()
 
 

@@ -25,23 +25,24 @@
         <thead>
         <tr>
             <th scope="col">#</th>
+            <th scope="col">Тест</th>
             <th scope="col">ФИО</th>
             <th scope="col">Группа</th>
             <th scope="col">Результаты</th>
             <th scope="col">Время</th>
-            <th scope="col">Статус</th>
         </tr>
         </thead>
         <tbody>
         {% for report in reports %}
         <tr>
             <th scope="row">1</th>
-            <td>{report.fio}</td>
-            <td>{report.group}</td>
-            <td>{report.result}</td>
-            <td>{report.datetime}</td>
-            <td>{report.status}</td>
+            <td>{{report.test}}</td>
+            <td>{{report.fio}}</td>
+            <td>{{report.group}}</td>
+            <td>{{report.result}}</td>
+            <td>{{report.time}}</td>
         </tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>

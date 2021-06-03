@@ -11,6 +11,15 @@ user_id = ""
 test_id = ""
 
 
+class Report(object):
+    def __init__(self, test, fio, group, result, time):
+        self.test = test
+        self.fio = fio
+        self.group = group
+        self.result = result
+        self.time = time
+
+
 def index(request, username="", test=""):
     if username == "" or test == "":
         return redirect('/sign_in/')
@@ -28,17 +37,23 @@ def test(request):
 
 
 def receive_results(request):
+
     user_id = request.GET.get("user_id")
     test_id = request.GET.get('test_id')
     results = json.loads(request.GET.get("results"))
+
     # print(user_id)
     student_id = Student.objects.filter(id=user_id)[0]
     # print(student_id)
     full_score = sum(results)
-    general_report = GeneralReport.objects.create(student_id=student_id, full_score=full_score)
+    test_object = Test.objects.filter(id=test_id)[0]
+    print(test_object.id)
+    general_report = GeneralReport.objects.create(student_id=student_id, test_id=test_object, full_score=full_score)
+
     general_report.save()
-    Attempt.objects.create(student_id=student_id, test_id=Test.objects.get(test_id), status="Done",
-                           general_id=general_report.id)
+
+    # Attempt.objects.create(student_id=student_id, test_id=Test.objects.get(test_id), status="Done",
+                           # general_id=general_report.id)
 
     return HttpResponse("Received")
 
@@ -264,8 +279,16 @@ def admin_page(request):
 
 
 def admin_results(request):
+
     if request.user.is_authenticated:
-        return render(request, 'admin_results.html')
+        general_reports = GeneralReport.objects.filter()
+        reports = [len(general_reports)]
+        for i in range (len(general_reports)):
+            student = Student.objects.filter(id=general_reports[i].student_id.id)[0]
+            reports[i] = Report(general_reports[i].test_id.id, student.full_name, student.group,
+                                general_reports[i].full_score, datetime.datetime.now())
+
+        return render(request, 'admin_results.html', {"reports": reports})
     else:
         return redirect('/sign_in/')
 
