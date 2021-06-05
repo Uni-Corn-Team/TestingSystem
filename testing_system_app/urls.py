@@ -25,6 +25,7 @@ urlpatterns = [
     url('sign_in_user', views.sign_in_user, name='sign_in_user'),
     url('sign_in', views.sign_in, name='sign_in'),
     url('admin_page', views.admin_page, name='admin_page'),
+    url('admin_result_values', views.admin_result_values, name='admin_result_values'),
     url('admin_results', views.admin_results, name='admin_results'),
     url('log_out_user', views.log_out_user, name='logout'),
 ]

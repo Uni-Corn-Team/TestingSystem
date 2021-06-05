@@ -279,16 +279,29 @@ def admin_page(request):
 
 
 def admin_results(request):
-
     if request.user.is_authenticated:
-        general_reports = GeneralReport.objects.filter()
-        reports = [len(general_reports)]
-        for i in range (len(general_reports)):
-            student = Student.objects.filter(id=general_reports[i].student_id.id)[0]
-            reports[i] = Report(general_reports[i].test_id.id, student.full_name, student.group,
-                                general_reports[i].full_score, datetime.datetime.now())
-
-        return render(request, 'admin_results.html', {"reports": reports})
+        return render(request, 'admin_results.html')
     else:
         return redirect('/sign_in/')
+
+
+def admin_result_values(request):
+    general_reports = GeneralReport.objects.filter()
+    print(len(general_reports))
+    reports = []
+    response = ""
+    for i in range(len(general_reports)):
+        student = Student.objects.filter(id=general_reports[i].student_id.id)[0]
+        reports.append(Report(general_reports[i].test_id.id, student.full_name, student.group,
+                            general_reports[i].full_score, datetime.datetime.now().date()))
+        response += "<tr>"
+        response += "<th scope = \"row\">1</th>"
+        response += "<td>" + str(reports[i].test) + "</td>"
+        response += "<td>" + str(reports[i].fio) + "</td>"
+        response += "<td>" + str(reports[i].group) + "</td>"
+        response += "<td>" + str(reports[i].result) + "</td>"
+        response += "<td>" + str(reports[i].time) + "</td>"
+        response += "</tr>"
+    print(str)
+    return HttpResponse(response)
 
