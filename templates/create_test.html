@@ -12,18 +12,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"
             integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF"
             crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <div class="container text-center">
-        <input type="text" placeholder="Введите название теста" id='test_name' class="TextInput">
-        <h1 class="Title">Введите вопросы теста</h1>
-    </div>
-    <div class="container text-center" id="questions">
-    </div>
+<div class="container text-center">
+    <input type="text" placeholder="Введите название теста" id='test_name' class="TextInput">
+    <h1 class="Title">Введите вопросы теста</h1>
+</div>
+<div class="container text-center" id="questions">
+</div>
 <div class="container text-center">
     <button class="Button ButtonAgree" data-toggle="modal" data-target="#questionModal">Добавить вопрос</button>
-        <button class="Button ButtonAgree" id="save">Сохранить</button>
+    <button class="Button ButtonAgree" id="save">Сохранить</button>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="questionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -43,21 +43,20 @@
         </div>
     </div>
 </div>
-<p class="LabelText" id='status' style="visibility: hidden">Тест сохранен! Вы можете выбрать его для отправки <a style='' href="/select_test">здесь</a></p>
+<a class="container text-center" href="/admin_page.html">назад</a>
+<p class="LabelText" id='status' style="visibility: hidden">Тест сохранен! Вы можете выбрать его для отправки <a
+        style='' href="/select_test">здесь</a></p>
 </body>
 <script>
     let container = document.getElementById('questions')
     let alreadyCreatedCount = 0;
     let save = document.getElementById('save')
 
-    function getTextForOption(answerIndex, countOfOptions)
-    {
+    function getTextForOption(answerIndex, countOfOptions) {
         console.log(typeof countOfOptions)
-        switch (countOfOptions)
-        {
+        switch (countOfOptions) {
             case 2:
-                switch (answerIndex)
-                {
+                switch (answerIndex) {
                     case 0:
                         return "Скорее да"
                     case 1:
@@ -65,8 +64,7 @@
                 }
                 break;
             case 3:
-                switch (answerIndex)
-                {
+                switch (answerIndex) {
                     case 0:
                         return "Почти никогда"
                     case 1:
@@ -76,13 +74,11 @@
                 }
         }
     }
-    function getPointsForOption(answerIndex, countOfOptions)
-    {
-        switch (countOfOptions)
-        {
+
+    function getPointsForOption(answerIndex, countOfOptions) {
+        switch (countOfOptions) {
             case 2:
-                switch (answerIndex)
-                {
+                switch (answerIndex) {
                     case 0:
                         return 10
                     case 1:
@@ -90,8 +86,7 @@
                 }
                 break;
             case 3:
-                switch (answerIndex)
-                {
+                switch (answerIndex) {
                     case 0:
                         return 0
                     case 1:
@@ -101,12 +96,13 @@
                 }
         }
     }
+
     function renderAnswer(questionIndex, answerIndex, countOfOptions) {
         let value = getTextForOption(answerIndex, countOfOptions)
         let points = getPointsForOption(answerIndex, countOfOptions)
         let div = document.createElement('div');
 
-        div.innerHTML = '<input type="text" id="question_' + alreadyCreatedCount + '__answer_' + answerIndex + '_text" class="TextInput" value="' + value + '"><input id="question_' + alreadyCreatedCount + '__answer_' + answerIndex + '_points" type="range" min="0" max="10" step="1" oninput="this.nextElementSibling.value = this.value" value="'+points+'" id="customRange1"><output class="LabelText">'+points+'</output>'
+        div.innerHTML = '<input type="text" id="question_' + alreadyCreatedCount + '__answer_' + answerIndex + '_text" class="TextInput" value="' + value + '"><input id="question_' + alreadyCreatedCount + '__answer_' + answerIndex + '_points" type="range" min="0" max="10" step="1" oninput="this.nextElementSibling.value = this.value" value="' + points + '" id="customRange1"><output class="LabelText">' + points + '</output>'
         return div;
     }
 
@@ -114,8 +110,8 @@
         let question = document.createElement("div")
         question.innerHTML = '<input type="text" id="question_' + alreadyCreatedCount + '" class="TextInput" placeholder="Введите текст ' + (alreadyCreatedCount + 1) + '-го вопроса"><label class="LabelText" for="question_' + alreadyCreatedCount + '">Вопрос с двумя вариантами</label>'
         container.appendChild(question);
-        container.appendChild(renderAnswer(alreadyCreatedCount, 0,2))
-        container.appendChild(renderAnswer(alreadyCreatedCount, 1,2))
+        container.appendChild(renderAnswer(alreadyCreatedCount, 0, 2))
+        container.appendChild(renderAnswer(alreadyCreatedCount, 1, 2))
         $('#questionModal').modal('hide');
         alreadyCreatedCount++;
     }
@@ -124,29 +120,28 @@
         let question = document.createElement("div")
         question.innerHTML = '<input type="text" id="question_' + alreadyCreatedCount + '" class="TextInput" placeholder="Введите текст ' + (alreadyCreatedCount + 1) + '-го вопроса"><label class="LabelText" for="question_' + alreadyCreatedCount + '">Вопрос с тремя вариантами</label>'
         container.appendChild(question);
-        container.appendChild(renderAnswer(alreadyCreatedCount, 0,3))
-        container.appendChild(renderAnswer(alreadyCreatedCount, 1,3))
-        container.appendChild(renderAnswer(alreadyCreatedCount, 2,3))
+        container.appendChild(renderAnswer(alreadyCreatedCount, 0, 3))
+        container.appendChild(renderAnswer(alreadyCreatedCount, 1, 3))
+        container.appendChild(renderAnswer(alreadyCreatedCount, 2, 3))
 
         $('#questionModal').modal('hide');
         alreadyCreatedCount++;
     }
 
-    save.onclick = function ()
-    {
+    save.onclick = function () {
         let test = {}
         test["name"] = document.getElementById('test_name').value;
         let questions = []
         for (let i = 0; i < alreadyCreatedCount; i++) {
-            let currentQuestionText = document.getElementById('question_'+i.toString()).value
-            let firstAnswerText = document.getElementById('question_'+i.toString()+"__answer_0_text").value
-            let firstAnswerPoints = document.getElementById('question_'+i.toString()+"__answer_0_points").value
+            let currentQuestionText = document.getElementById('question_' + i.toString()).value
+            let firstAnswerText = document.getElementById('question_' + i.toString() + "__answer_0_text").value
+            let firstAnswerPoints = document.getElementById('question_' + i.toString() + "__answer_0_points").value
             let firstAnswer = {
                 "text": firstAnswerText,
                 "points": firstAnswerPoints
             }
-            let secondAnswerText = document.getElementById('question_'+i.toString()+"__answer_1_text").value
-            let secondAnswerPoints = document.getElementById('question_'+i.toString()+"__answer_1_points").value
+            let secondAnswerText = document.getElementById('question_' + i.toString() + "__answer_1_text").value
+            let secondAnswerPoints = document.getElementById('question_' + i.toString() + "__answer_1_points").value
             let secondAnswer = {
                 "text": secondAnswerText,
                 "points": secondAnswerPoints
@@ -154,26 +149,23 @@
             let question = {
                 "text": currentQuestionText,
                 "answers":
-                [
-                    firstAnswer,
-                    secondAnswer
-                ]
+                    [
+                        firstAnswer,
+                        secondAnswer
+                    ]
             }
-            try
-            {
-                let thirdAnswerText = document.getElementById('question_'+i.toString()+"__answer_2_text").value
-                let thirdAnswerPoints = document.getElementById('question_'+i.toString()+"__answer_2_points").value
+            try {
+                let thirdAnswerText = document.getElementById('question_' + i.toString() + "__answer_2_text").value
+                let thirdAnswerPoints = document.getElementById('question_' + i.toString() + "__answer_2_points").value
                 let thirdAnswer = {
-                "text": thirdAnswerText,
-                "points": thirdAnswerPoints
+                    "text": thirdAnswerText,
+                    "points": thirdAnswerPoints
                 }
                 question.answers.push(thirdAnswer)
-            }
-            catch (e) {
-
+            } catch (e) {
+                document.location("/error/")
             }
             questions.push(question)
-
         }
         test['questions'] = (questions)
         let data = JSON.stringify(test)
@@ -183,9 +175,7 @@
             data: {test: data}
         });
         document.getElementById('status').style.visibility = 'visible'
-
     }
-
 
 </script>
 </html>

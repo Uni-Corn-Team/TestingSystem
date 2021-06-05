@@ -18,7 +18,7 @@
 <div class="Rectangle"></div>
 <div class="Circle"></div>
 <div class="container text-center">
-    <h>Результаты</h>
+    <h1 class="container text-center Title">Результаты</h1>
 </div>
 <div class="container text-center">
     <table class="table table-dark" id="result_table">
@@ -33,11 +33,9 @@
         </tr>
         </thead>
         <tbody id="admin_res_tbody">
-        <!--<{% for report in reports %}-->
-
-        <!--<{% endfor %}-->
         </tbody>
     </table>
+    <a class="text-center" href="/admin_page.html">назад</a>
     <script>
         async function subscribe() {
             let response = await fetch("/admin_result_values");
