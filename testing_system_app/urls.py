@@ -2,16 +2,15 @@ from django.conf.urls import url
 from django.urls import path
 
 from . import views
-from .view import admin_result, admin_page, authorization, user_test, index, create_test
+from .view import admin_result, admin_page, authorization, user_test, index, create_test, test_refs
 
 app_name = 'testing_system_app'
 
 urlpatterns = [
     url(r'^$', index.index, name='index'),
     path('usr/<str:username>/test/<str:test>', index.index, name='index'),
-    url('send_mail', views.send_mail, name='fdsfd'),
-    url('mail_test', views.mail_test, name='dsgf'),
-    url('select_test', views.select_test, name='fdsf'),
+    url('mail_test', test_refs.mail_test, name='dsgf'),
+    url('select_test', test_refs.select_test, name='fdsf'),
     url('create_test', create_test.create_test, name='create_test'),
     url('add_test', create_test.add_test, name='add_test'),
     url('test', user_test.test, name='test'),

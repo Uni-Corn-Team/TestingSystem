@@ -11,10 +11,6 @@ def index(request, username="", test=""):
     if username == "" or test == "":
         return redirect('/sign_in/')
     general_reports = GeneralReport.objects.filter()
-    for student in Student.objects.filter():
-        if student.id == username:
-            username = student.full_name
-            break
     for report in general_reports:
         if int(report.student_id_id) == int(username) and int(report.test_id_id) == int(test):
             return render(request, 'already_done.html')
