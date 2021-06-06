@@ -1,6 +1,7 @@
 import datetime
 
 from django.db import models
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -12,6 +13,11 @@ class Student(models.Model):
 
 class Test(models.Model):
     name = models.CharField(max_length=255)
+    admin_id = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        default=1
+    )
 
 
 class Attempt(models.Model):
@@ -74,6 +80,9 @@ class GeneralReport(models.Model):
         default=0
     )
     full_score = models.IntegerField()
+    date = models.DateTimeField(
+        default=datetime.datetime.now()
+    )
 
 
 class FullReport(models.Model):
