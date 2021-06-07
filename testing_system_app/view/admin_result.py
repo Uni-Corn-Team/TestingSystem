@@ -32,17 +32,18 @@ def admin_result_values(request):
     for test in Test.objects.filter():
         if test.admin_id_id == user_id:
             tests.append(test.id)
+
     for i in range(len(general_reports)):
         if general_reports[i].test_id_id in tests:
             student = Student.objects.filter(id=general_reports[i].student_id.id)[0]
             reports.append(Report(general_reports[i].test_id.id, student.full_name, student.group,
                                   general_reports[i].full_score, datetime.datetime.now().date()))
             response += "<tr>"
-            response += "<th scope = \"row\">" + str(i + 1) + "</th>"
-            response += "<td>" + str(reports[i].test) + "</td>"
-            response += "<td>" + str(reports[i].fio) + "</td>"
-            response += "<td>" + str(reports[i].group) + "</td>"
-            response += "<td>" + str(reports[i].result) + "</td>"
-            response += "<td>" + str(reports[i].time) + "</td>"
+            response += "<th scope = \"row\">" + str(len(reports - 1) + 1) + "</th>"
+            response += "<td>" + str(reports[len(reports - 1) ].test) + "</td>"
+            response += "<td>" + str(reports[len(reports - 1) ].fio) + "</td>"
+            response += "<td>" + str(reports[len(reports - 1) ].group) + "</td>"
+            response += "<td>" + str(reports[len(reports - 1) ].result) + "</td>"
+            response += "<td>" + str(reports[len(reports - 1) ].time) + "</td>"
             response += "</tr>"
     return HttpResponse(response)
