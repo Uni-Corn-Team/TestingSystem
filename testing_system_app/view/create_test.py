@@ -13,7 +13,7 @@ def create_test(request):
 def add_test(request):
     if request.method == "GET":
         all_questions = json.loads(request.GET.get("test"))
-        print(all_questions)
+        
         test = Test.objects.create(name=all_questions["name"])
         test.save()
         for i in range(len(all_questions["questions"])):
