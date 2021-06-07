@@ -1,5 +1,6 @@
 import json
 
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
@@ -13,8 +14,14 @@ def create_test(request):
 def add_test(request):
     if request.method == "GET":
         all_questions = json.loads(request.GET.get("test"))
-        
-        test = Test.objects.create(name=all_questions["name"])
+
+        user_id = 1
+        for _user in User.objects.filter():
+            if str(_user.username) == str(request.user):
+                user_id = _user.id
+                break
+
+        test = Test.objects.create(name=all_questions["name"], admin_id_id=user_id)
         test.save()
         for i in range(len(all_questions["questions"])):
             questions = Question.objects.create(test_id=Test.objects.all().last(),
