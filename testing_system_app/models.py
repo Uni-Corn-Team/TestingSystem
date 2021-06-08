@@ -7,8 +7,12 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Student(models.Model):
     full_name = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
     group = models.CharField(max_length=255)
+    user_id = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        default=1
+    )
 
 
 class Test(models.Model):
@@ -106,12 +110,4 @@ class FullGeneralReport(models.Model):
         GeneralReport,
         on_delete=models.CASCADE
     )
-
-
-
-
-
-
-
-
 

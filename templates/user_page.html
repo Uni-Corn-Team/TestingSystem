@@ -18,9 +18,9 @@
 <body>
 <div class="container text-center">
     <h1 class="Title">Страица администратора</h1>
-    <button class="Button ButtonAgree" id="tests">Ваши тесты</button>
+    <!--<button class="Button ButtonAgree" id="tests">Ваши тесты</button>
     <button class="Button ButtonAgree" id="results">Результаты</button>
-    <button class="Button ButtonAgree" id="create_test">&nbsp Создать &nbsp</button>
+    <button class="Button ButtonAgree" id="create_test">&nbsp Создать &nbsp</button>-->
     <button class="Button ButtonAgree" id="exit">&nbsp &nbsp Выход &nbsp &nbsp</button>
 </div>
 
@@ -34,7 +34,7 @@
     let create_test_button = document.getElementById('create_test');
     let exit_button = document.getElementById('exit')
 
-    tests_button.onclick = function () {
+    /*tests_button.onclick = function () {
         document.location = '/select_test/'
     }
 
@@ -44,7 +44,7 @@
 
     create_test_button.onclick = function () {
         document.location = '/create_test/'
-    }
+    }*/
 
     exit_button.onclick = function () {
         $.ajax({

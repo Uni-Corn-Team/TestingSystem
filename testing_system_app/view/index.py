@@ -1,6 +1,7 @@
 import datetime
 
 from django.conf.urls import handler404
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 

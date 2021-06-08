@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.urls import path
 
 from . import views
-from .view import admin_result, admin_page, authorization, user_test, index, create_test, test_refs
+from .view import admin_result, admin_page, authorization, user_test, index, create_test, test_refs, user_page
 
 app_name = 'testing_system_app'
 
@@ -24,6 +24,7 @@ urlpatterns = [
     url('sign_in_user', authorization.sign_in_user, name='sign_in_user'),
     url('sign_in', authorization.sign_in, name='sign_in'),
     url('admin_page', admin_page.admin_page, name='admin_page'),
+    url('user_page', user_page.user_page, name='user_page'),
     url('admin_result_values', admin_result.admin_result_values, name='admin_result_values'),
     url('admin_results', admin_result.admin_results, name='admin_results'),
     url('log_out_user', authorization.log_out_user, name='logout'),
