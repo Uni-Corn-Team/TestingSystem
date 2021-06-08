@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <title>Здравствуй!</title>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <link rel="stylesheet" href="../static/style.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -16,59 +18,48 @@
 <div class="container">
     <h1 class="text-center Title">Платформа психологического анкетирования</h1>
     <p class="Text">Здравствуйте, в рамках ежегодного психологического тестирования НИУ МИЭТ
-    мы просим вас пройти несколько вопросов о вашем текущем состоянии. Это займет около 30 минут</p>
-        <h2 class="text-center Title">Прочтите условия выполнения теста перед выполнением</h2>
+        мы просим вас пройти несколько вопросов о вашем текущем состоянии. Это займет около 30 минут</p>
+    <h2 class="text-center Title">Прочтите условия выполнения теста перед выполнением</h2>
     <p class="Text">
-
-Данный экспресс-опросник призван помочь вам адекватно и быстро оценить показатели вашего эмоционального состояния и удовлетворенности условиям, в которых находится ваша психика, а также проверить степень понимания себя. Эти показатели влияют на работоспособность, отношения с другими и, в целом, на субъективное представление об окружающей реальности.
- Адекватность полученного результата зависит от того, насколько честно и внимательно вы отнеслись к вопросам. Адекватная оценка своего состояния, в свою очередь, является адекватной точкой отсчета для психологической работы над собой в верном направлении, в случае вашей заинтересованности в состоянии собственной психики.
+        Данный экспресс-опросник призван помочь вам адекватно и быстро оценить показатели вашего эмоционального
+        состояния и удовлетворенности условиям, в которых находится ваша психика, а также проверить степень понимания
+        себя. Эти показатели влияют на работоспособность, отношения с другими и, в целом, на субъективное представление
+        об окружающей реальности.
+        Адекватность полученного результата зависит от того, насколько честно и внимательно вы отнеслись к вопросам.
+        Адекватная оценка своего состояния, в свою очередь, является адекватной точкой отсчета для психологической
+        работы над собой в верном направлении, в случае вашей заинтересованности в состоянии собственной психики.
     </p>
-            <h2 class="text-center Title">Небольшая инструкция</h2>
+    <h2 class="text-center Title">Небольшая инструкция</h2>
     <p class="Text">
-        Пожалуйста вздохните глубоко, выдохните и настройтесь на 15-20 минут рефлексивной работы. Внимательно читайте вопрос и соотносите его с вашим преобладающим состоянием. Постарайтесь отвечать по возможности быстро. Некоторые вопросы могут вызывать затруднение или сопротивление, однако постарайтесь и на них не задерживаться слишком долго.
+        Пожалуйста вздохните глубоко, выдохните и настройтесь на 15-20 минут рефлексивной работы. Внимательно читайте
+        вопрос и соотносите его с вашим преобладающим состоянием. Постарайтесь отвечать по возможности быстро. Некоторые
+        вопросы могут вызывать затруднение или сопротивление, однако постарайтесь и на них не задерживаться слишком
+        долго.
     </p>
-
     <p>
-
     </p>
     <div class="text-center">
-
-
-            <button class="Button ButtonAgree" id="agree" onclick="agreed()">Согласен, начать тестирование</button>
-            <button class="Button ButtonDisagree" onclick="disagreed()">Отказываюсь от тестирования</button>
-
+        <button class="Button ButtonAgree" id="agree" onclick="agreed()">Согласен, начать тестирование</button>
     </div>
 </div>
 
 
-
-
 </body>
 <script>
-    function agreed()
-    {
+    function agreed() {
         const urlParams = new URLSearchParams(window.location.search);
-        let userId = urlParams.get("user_id")
-        let testId = urlParams.get("test_id")
-        let url = "/submit_agreement?user_id="+userId + "&test_id="+testId
+        let path = location.pathname.split('/')
+        let url = "/submit_agreement/" + path[path.length - 3] + "/" + path[path.length - 1]
         $.ajax({
             type: "GET",
             url: url,
-            success: function ()
-            {
-                document.location="test.html?user_id="+userId + "&test_id="+testId
+            success: function () {
+                document.location = "/test.html?user_id=" + path[path.length - 3] + "&test_id=" + path[path.length - 1]
             },
-             error: function() {
-            document.location = '/error/'
+            error: function () {
+                document.location = '/error/'
             }
         });
     }
-        function disagreed()
-        {
-            alert("Вы отказались от выполнения теста")
-            document.getElementById("agree").style.visibility = "hidden"
-        }
-
-
 </script>
 </html>
