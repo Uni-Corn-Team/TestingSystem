@@ -111,3 +111,13 @@ class FullGeneralReport(models.Model):
         on_delete=models.CASCADE
     )
 
+
+class UsersTests(models.Model):
+    user_id = models.ForeignKey(
+        Student,
+        on_delete=models.CASCADE
+    )
+    test_id = models.ForeignKey(
+        Test,
+        on_delete=models.CASCADE
+    )

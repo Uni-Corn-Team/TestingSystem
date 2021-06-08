@@ -3,7 +3,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Страница администратора</title>
+    <title>Страница пользователя</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
@@ -17,10 +17,27 @@
 </head>
 <body>
 <div class="container text-center">
-    <h1 class="Title">Страица администратора</h1>
-    <!--<button class="Button ButtonAgree" id="tests">Ваши тесты</button>
-    <button class="Button ButtonAgree" id="results">Результаты</button>
-    <button class="Button ButtonAgree" id="create_test">&nbsp Создать &nbsp</button>-->
+    <h1 class="Title">{{student.full_name}}</h1>
+    <table class="table table-dark" id="tests_user_table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Тест</th>
+            <th scope="col">Ссылка</th>
+            <th scope="col">Резульат</th>
+        </tr>
+        </thead>
+        <tbody id="user_res_tbody">
+        {% for test in tests %}
+        <tr>
+            <th>{{test.test.id}}</th>
+            <td>{{test.test.name}}</td>
+            <td class="testref">/usr/{{student.id}}/test/{{test.test.id}}</td>
+            <td>{{test.result}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
     <button class="Button ButtonAgree" id="exit">&nbsp &nbsp Выход &nbsp &nbsp</button>
 </div>
 
@@ -29,22 +46,7 @@
 </html>
 
 <script>
-    let tests_button = document.getElementById('tests');
-    let results_button = document.getElementById('results');
-    let create_test_button = document.getElementById('create_test');
     let exit_button = document.getElementById('exit')
-
-    /*tests_button.onclick = function () {
-        document.location = '/select_test/'
-    }
-
-    results_button.onclick = function () {
-        document.location = '/admin_results/'
-    }
-
-    create_test_button.onclick = function () {
-        document.location = '/create_test/'
-    }*/
 
     exit_button.onclick = function () {
         $.ajax({
@@ -58,4 +60,13 @@
             }
         });
     }
+
+    let refs = document.getElementsByClassName('testref')
+
+    for(let i = 0; i < refs.length; i++){
+        refs[i].onclick = function(){
+            document.location = refs[i].innerText;
+        }
+    }
+
 </script>

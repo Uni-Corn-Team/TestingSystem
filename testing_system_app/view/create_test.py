@@ -8,7 +8,8 @@ from testing_system_app.models import Question, Answer, Test, QuestionAnswer
 
 
 def create_test(request):
-    return render(request, 'create_test.html')
+    if request.user.is_superuser:
+        return render(request, 'create_test.html')
 
 
 def add_test(request):

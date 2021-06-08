@@ -176,3 +176,8 @@ a:hover {
 .ButtonChoice {
     background-color: black;
 }
+
+.testref {
+    cursor: pointer;
+    text-decoration: underline;
+}

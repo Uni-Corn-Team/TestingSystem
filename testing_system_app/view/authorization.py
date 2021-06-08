@@ -23,7 +23,6 @@ def sign_in_user(request):
     if user is not None:
         if user.is_active:
             login(request, user)
-            print(user.is_superuser)
             if user.is_superuser:
                 return HttpResponseRedirect('/admin_page/')
             else:

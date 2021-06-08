@@ -14,7 +14,8 @@ class Report(object):
 
 def admin_results(request):
     if request.user.is_authenticated:
-        return render(request, 'admin_results.html')
+        if request.user.is_superuser:
+            return render(request, 'admin_results.html')
     else:
         return redirect('/sign_in/')
 
