@@ -37,8 +37,8 @@
     }
     if(currentQuestion == "Finish")
     {
-
-         document.location = '/finish?user_id=' + userId+"&test_id="+testId;
+        document.cookie= 'current_question=; expires=Mon, 05 Jul 1982 16:37:55 GMT; ';
+        document.location = '/finish?user_id=' + userId+"&test_id="+testId;
     }
     if(currentQuestion === undefined) // если в куки ничего нет, значит нужно попросить первый вопрос
     {

@@ -23,6 +23,7 @@
     <p class="Text">
 
     </p>
+    <p class="text-center"><a class="Title" href="/user_page">&#8678;На главную</a></p>
 </div>
 
 
@@ -50,6 +51,7 @@
 
     function sendResultsToServer() {
         let testingStr = Cookies.get('testing')
+        document.cookie= 'testing=; expires=Mon, 05 Jul 1982 16:37:55 GMT; ';
         $.ajax({
             url: '/receive_results?results=' + testingStr + "&user_id=" + userId + "&test_id=" + testId,
             method: 'get'

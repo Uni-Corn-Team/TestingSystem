@@ -27,9 +27,9 @@
         <tbody id="admin_res_tbody">
         {% for student in students %}
         <tr>
-            <td>{{student.full_name}}</td>
-            <td>{{student.group}}</td>
-            <td>usr/{{student.id}}/test/{{test}}</td>
+            <td>{{student.student.full_name}}</td>
+            <td>{{student.student.group}}</td>
+            <td>usr/{{student.student.id}}/test/{{test}}</td>
         </tr>
         {% endfor %}
         </tbody>

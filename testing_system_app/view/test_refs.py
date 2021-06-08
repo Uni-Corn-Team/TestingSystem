@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from testing_system_app.models import Student, Test
+from testing_system_app.models import Student, Test, UsersTests
 
 
 def select_test(request):
@@ -24,5 +24,11 @@ def mail_test(request):
     students = Student.objects.filter()
     if request.user.is_authenticated:
         if request.user.is_superuser:
+            studs = []
+            for stud in students:
+                if len(UsersTests.objects.filter(user_id_id=stud.id, test_id_id=request.GET.get('test_id')))==0:
+                    studs.append({"student": stud, "checked": False})
+                else:
+                    studs.append({"student": stud, "checked": True})
             return render(request, "send_test.html",
-                  {"students": students, "test": request.GET.get('test_id'), "test_name": request.GET.get('test_name')})
+                  {"students": studs, "test": request.GET.get('test_id'), "test_name": request.GET.get('test_name')})
